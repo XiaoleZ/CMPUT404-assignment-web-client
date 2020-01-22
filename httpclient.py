@@ -67,6 +67,7 @@ class HTTPClient(object):
         return None
 
     def get_body(self, data):
+        print("testing",data)
         return data.split("\r\n\r\n")[1]
 
     def sendall(self, data):
@@ -89,7 +90,7 @@ class HTTPClient(object):
 
     def GET(self, url, args=None):
         code = 500
-
+        print(url)
         hostname = urlparse(url).hostname
         path = urlparse(url).path
         port = urlparse(url).port
@@ -102,8 +103,7 @@ class HTTPClient(object):
 
         header = ('GET ' + path + ' HTTP/1.1\r\n'
                   'Host: ' + hostname + '\r\n'
-                  'Connection: close\r\n'
-                  'Cache-Control: no-cache\r\n\r\n')
+                  'Connection: close\r\n\r\n')
 
         self.connect(hostname, port)
         self.sendall(header)
@@ -133,10 +133,15 @@ class HTTPClient(object):
         if not path:
             path = '/'
 
+        if a:
+           length = len(a)
+        else:
+            length = 0 
+            
         header = ('POST ' + path + ' HTTP/1.1\r\n'
                   'Host: ' + hostname + '\r\n'
                   'Content-Type: application/x-www-form-urlencoded\r\n'
-                  'Content-Length: ' + str(77) + '\r\n'
+                  'Content-Length: ' + str(length) + '\r\n'
                   'Connection: close\r\n\r\n')
 
         if a:
