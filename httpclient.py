@@ -67,7 +67,6 @@ class HTTPClient(object):
         return None
 
     def get_body(self, data):
-        print("testing",data)
         return data.split("\r\n\r\n")[1]
 
     def sendall(self, data):
@@ -90,7 +89,11 @@ class HTTPClient(object):
 
     def GET(self, url, args=None):
         code = 500
-        print(url)
+
+        if 'http' not in url and 'https' not in url:
+            body = 'HTTP/1.1 404 Not Found'
+            return HTTPResponse(404, body)
+
         hostname = urlparse(url).hostname
         path = urlparse(url).path
         port = urlparse(url).port
@@ -101,9 +104,11 @@ class HTTPClient(object):
         if not path:
             path = '/'
 
-        header = ('GET ' + path + ' HTTP/1.1\r\n'
-                  'Host: ' + hostname + '\r\n'
-                  'Connection: close\r\n\r\n')
+        header = (
+            'GET ' + path + ' HTTP/1.1\r\n'
+            'Host: ' + hostname + '\r\n'
+            'Connection: close\r\n\r\n'
+        )
 
         self.connect(hostname, port)
         self.sendall(header)
@@ -118,6 +123,10 @@ class HTTPClient(object):
 
     def POST(self, url, args=None):
         code = 500
+
+        if 'http' not in url and 'https' not in url:
+            body = 'HTTP/1.1 404 Not Found'
+            return HTTPResponse(404, body)
 
         hostname = urlparse(url).hostname
         path = urlparse(url).path
@@ -136,13 +145,15 @@ class HTTPClient(object):
         if a:
            length = len(a)
         else:
-            length = 0 
-            
-        header = ('POST ' + path + ' HTTP/1.1\r\n'
-                  'Host: ' + hostname + '\r\n'
-                  'Content-Type: application/x-www-form-urlencoded\r\n'
-                  'Content-Length: ' + str(length) + '\r\n'
-                  'Connection: close\r\n\r\n')
+            length = 0
+
+        header = (
+            'POST ' + path + ' HTTP/1.1\r\n'
+            'Host: ' + hostname + '\r\n'
+            'Content-Type: application/x-www-form-urlencoded\r\n'
+            'Content-Length: ' + str(length) + '\r\n'
+            'Connection: close\r\n\r\n'
+        )
 
         if a:
             header += a
