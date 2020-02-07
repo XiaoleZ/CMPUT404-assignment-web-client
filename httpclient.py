@@ -92,6 +92,7 @@ class HTTPClient(object):
 
         if 'http' not in url and 'https' not in url:
             body = 'HTTP/1.1 404 Not Found'
+            print(body)
             return HTTPResponse(404, body)
 
         hostname = urlparse(url).hostname
@@ -117,7 +118,7 @@ class HTTPClient(object):
 
         code = self.get_code(response)
         body = self.get_body(response)
-
+        print(body)
         self.close()
         return HTTPResponse(code, body)
 
@@ -126,6 +127,7 @@ class HTTPClient(object):
 
         if 'http' not in url and 'https' not in url:
             body = 'HTTP/1.1 404 Not Found'
+            print(body)
             return HTTPResponse(404, body)
 
         hostname = urlparse(url).hostname
@@ -165,6 +167,7 @@ class HTTPClient(object):
 
         code = self.get_code(response)
         body = self.get_body(response)
+        print(body)
         self.close()
         return HTTPResponse(code, body)
 
